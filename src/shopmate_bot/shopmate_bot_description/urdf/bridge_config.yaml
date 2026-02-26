@@ -1,0 +1,36 @@
+# Bridge Config for Ignition Fortress <-> ROS 2
+
+# 1. Cmd Vel (ROS -> Ignition)
+- topic_name: /cmd_vel
+  ros_type_name: geometry_msgs/msg/Twist
+  gz_type_name: ignition.msgs.Twist
+  direction: ROS_TO_GZ
+
+# 2. Odometry (Ignition -> ROS)
+- topic_name: /odom
+  ros_type_name: nav_msgs/msg/Odometry
+  gz_type_name: ignition.msgs.Odometry
+  direction: GZ_TO_ROS
+
+# 3. TF / TF Static (Ignition -> ROS)
+- topic_name: /tf
+  ros_type_name: tf2_msgs/msg/TFMessage
+  gz_type_name: ignition.msgs.Pose_V
+  direction: GZ_TO_ROS
+
+- topic_name: /tf_static
+  ros_type_name: tf2_msgs/msg/TFMessage
+  gz_type_name: ignition.msgs.Pose_V
+  direction: GZ_TO_ROS
+
+# 4. LiDAR Scan (Ignition -> ROS)
+- topic_name: /scan
+  ros_type_name: sensor_msgs/msg/LaserScan
+  gz_type_name: ignition.msgs.LaserScan
+  direction: GZ_TO_ROS
+
+# 5. Joint States (Ignition -> ROS)
+- topic_name: /joint_states
+  ros_type_name: sensor_msgs/msg/JointState
+  gz_type_name: ignition.msgs.Model
+  direction: GZ_TO_ROS

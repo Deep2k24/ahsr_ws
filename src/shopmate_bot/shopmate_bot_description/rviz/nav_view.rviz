@@ -1,0 +1,31 @@
+# Simplified RViz Config for Hospital Navigation
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Name: Grid
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Robot Description: robot_description
+    - Class: rviz_default_plugins/LaserScan
+      Name: LaserScan
+      Topic: /scan
+      Size (m): 0.05
+    - Class: rviz_default_plugins/Map
+      Name: Global_Costmap
+      Topic: /global_costmap/costmap
+      Color Scheme: costmap  # This bypasses the basic 'map' shader
+    - Class: rviz_default_plugins/Map
+      Name: Local_Costmap
+      Topic: /local_costmap/costmap
+      Color Scheme: costmap
+      Alpha: 0.7
+    - Class: rviz_default_plugins/Path
+      Name: Path
+      Topic: /plan
+      Color: 0; 255; 0
+  Global Options:
+    Fixed Frame: map
+    Publish Status Details: true

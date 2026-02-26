@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot name="shopmate_bot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Include materials -->
+  <xacro:include filename="$(find shopmate_bot_description)/urdf/materials.xacro"/>
+
+  <!-- Include your robot geometry -->
+  <xacro:include filename="$(find shopmate_bot_description)/urdf/shopmate_bot.trans"/>
+  
+
+</robot>

@@ -1,0 +1,258 @@
+<?xml version="1.0" ?>
+<robot name="shopmate_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find shopmate_bot_description)/urdf/materials.xacro" />
+    <xacro:include filename="$(find shopmate_bot_description)/urdf/shopmate_bot.trans" />
+
+    <gazebo>
+        <plugin filename="libignition-gazebo-sensors-system.so" 
+                name="ignition::gazebo::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+
+        <plugin filename="libignition-gazebo-diff-drive-system.so" 
+                name="ignition::gazebo::systems::DiffDrive">
+            
+            <left_joint>base_left_wheel_joint</left_joint>
+            <right_joint>base_right_wheel_joint</right_joint>
+            <wheel_separation>0.52</wheel_separation>
+            <wheel_radius>0.05</wheel_radius>
+            <max_linear_acceleration>1.0</max_linear_acceleration>
+            <topic>cmd_vel</topic>
+            <odom_topic>odom</odom_topic>
+            <tf_topic>tf</tf_topic>
+            <frame_id>odom</frame_id>
+            <child_frame_id>base_footprint</child_frame_id>
+        </plugin>
+
+        <plugin filename="libignition-gazebo-joint-state-publisher-system.so" 
+                name="ignition::gazebo::systems::JointStatePublisher">
+            <topic>joint_states</topic>
+        </plugin>
+    </gazebo>
+
+    <link name="base_footprint" />
+    
+    <link name="base_link">
+        <inertial>
+            <origin xyz="-0.029045 0.000502 0.318721" rpy="0 0 0"/>
+            <mass value="50.0"/>
+            <inertia ixx="2.5" iyy="2.5" izz="2.5" ixy="0.0" iyz="0.0" ixz="0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="right_wheel_link_1">
+        <inertial>
+            <origin xyz="0 0.01 0" rpy="0 0 0"/>
+            <mass value="1.2"/>
+            <inertia ixx="0.002" iyy="0.002" izz="0.002" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0.26 -0.05" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/right_wheel_link_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="1.5707 0 0"/>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>1.0</mu>
+                        <mu2>1.0</mu2>
+                    </ode>
+                </friction>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="left_wheel_link_1">
+        <inertial>
+            <origin xyz="0 -0.01 0" rpy="0 0 0"/>
+            <mass value="1.2"/>
+            <inertia ixx="0.002" iyy="0.002" izz="0.002" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.26 -0.05" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/left_wheel_link_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="1.5707 0 0"/>
+            <geometry>
+                <cylinder radius="0.05" length="0.04"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>1.0</mu>
+                        <mu2>1.0</mu2>
+                    </ode>
+                </friction>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="lidar_link_1">
+        <inertial>
+            <origin xyz="0 0 0.01" rpy="0 0 0"/>
+            <mass value="0.1"/>
+            <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual>
+            <origin xyz="-0.3 0 -0.24" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/lidar_link_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="-0.3 0 -0.24" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/lidar_link_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="lidar_link_1">
+        <sensor name="lidar" type="gpu_lidar">
+            <pose>0 0 0 0 0 0</pose>
+            <always_on>true</always_on>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <topic>scan</topic>
+            <gz_frame_id>lidar_link_1</gz_frame_id>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.15</min>
+                    <max>12.0</max>
+                    <resolution>0.01</resolution>
+                </range>
+            </ray>
+        </sensor>
+    </gazebo>
+
+    <link name="caster_front_1">
+        <inertial>
+            <origin xyz="-0.0049 0 -0.0195" rpy="0 0 0"/>
+            <mass value="0.381"/>
+            <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual>
+            <origin xyz="-0.243787 0 -0.04529" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/caster_front_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="0.045"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>0.0</mu>
+                        <mu2>0.0</mu2>
+                    </ode>
+                </friction>
+            </surface>
+        </collision>
+    </link>
+
+    <link name="caster_rear_1">
+        <inertial>
+            <origin xyz="0.0049 0 -0.0195" rpy="0 0 0"/>
+            <mass value="0.381"/>
+            <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" iyz="0" ixz="0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.243787 0 -0.04529" rpy="0 0 1.5707"/>
+            <geometry>
+                <mesh filename="file://$(find shopmate_bot_description)/meshes/caster_rear_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="0.045"/>
+            </geometry>
+            <surface>
+                <friction>
+                    <ode>
+                        <mu>0.0</mu>
+                        <mu2>0.0</mu2>
+                    </ode>
+                </friction>
+            </surface>
+        </collision>
+    </link>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint" />
+        <child link="base_link" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="base_right_wheel_joint" type="continuous">
+        <origin xyz="0.0 -0.26 0.05" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="right_wheel_link_1"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="base_left_wheel_joint" type="continuous">
+        <origin xyz="0.0 0.26 0.05" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="left_wheel_link_1"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="base_lidar_joint" type="fixed">
+        <origin xyz="0.25 0.0 0.24" rpy="0 0 3.14159"/>
+        <parent link="base_link"/>
+        <child link="lidar_link_1"/>
+    </joint>
+
+    <joint name="base_caster_front_joint" type="fixed">
+        <origin xyz="0.243787 0.0 0.04529" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="caster_front_1"/>
+    </joint>
+
+    <joint name="base_caster_rear_joint" type="fixed">
+        <origin xyz="-0.243787 0.0 0.04529" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="caster_rear_1"/>
+    </joint>
+
+</robot>
