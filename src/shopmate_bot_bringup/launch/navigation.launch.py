@@ -29,7 +29,9 @@ def generate_launch_description():
                 'map': map_file,
                 'params_file': params_file,
                 'use_sim_time': 'False',
-                'autostart': 'True'
+                'autostart': 'True',
+                'use_collision_monitor': 'False',   # <--- Add this
+                'use_velocity_smoother': 'False'
             }.items()
         ),
 
