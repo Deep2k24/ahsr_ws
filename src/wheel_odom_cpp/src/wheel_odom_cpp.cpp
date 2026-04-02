@@ -118,6 +118,7 @@ private:
       long left = std::stol(l);
       long right = std::stol(r);
 
+      RCLCPP_INFO(this->get_logger(), "RAW ENC -> Left: %ld, Right: %ld", left, right);
       // FINAL FIX 2: Inverting the backward encoder so the robot doesn't spin in place!
       right = -right;
 

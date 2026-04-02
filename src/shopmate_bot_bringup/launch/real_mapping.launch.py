@@ -49,7 +49,7 @@ def generate_launch_description():
             os.path.join(pkg_rplidar, 'launch', 'rplidar_c1_launch.py')
         ),
         launch_arguments={
-            'serial_port': '/dev/ttyUSB0', 
+            'serial_port': '/dev/serial/by-id/usb-Silicon_Labs_CP2102N_USB_to_UART_Bridge_Controller_9e2413cd467fef1180a4221cedd322a4-if00-port0', 
             'frame_id': 'lidar_link_1'
         }.items()
     )
